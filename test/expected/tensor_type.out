@@ -1,0 +1,179 @@
+SELECT '[1, 2, 3]'::tensor;
+ tensor  
+---------
+ [1,2,3]
+(1 row)
+
+SELECT '[[1, 2], [3, 4]]'::tensor;
+    tensor     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+
+SELECT '[1.,2.,3.]'::tensor;
+ tensor  
+---------
+ [1,2,3]
+(1 row)
+
+SELECT ' [ [ 1,  2    ] , [    3 , 4 ] ] '::tensor;
+    tensor     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+
+SELECT '[[[1.2345]]]'::tensor;
+    tensor    
+--------------
+ [[[1.2345]]]
+(1 row)
+
+SELECT '[hello, 1]'::tensor;
+ERROR:  invalid input syntax for type tensor: "[hello, 1]"
+LINE 1: SELECT '[hello, 1]'::tensor;
+               ^
+SELECT '[NaN,1]'::tensor;
+ERROR:  NaN not allowed in tensor
+LINE 1: SELECT '[NaN,1]'::tensor;
+               ^
+SELECT '[Infinity,1]'::tensor;
+ERROR:  infinite value not allowed in tensor
+LINE 1: SELECT '[Infinity,1]'::tensor;
+               ^
+SELECT '[-Infinity,1]'::tensor;
+ERROR:  infinite value not allowed in tensor
+LINE 1: SELECT '[-Infinity,1]'::tensor;
+               ^
+SELECT '[1.5e38, -1.5e38]'::tensor;
+       tensor       
+--------------------
+ [1.5e+38,-1.5e+38]
+(1 row)
+
+SELECT '[1.5e+38,-1.5e+38]'::tensor;
+       tensor       
+--------------------
+ [1.5e+38,-1.5e+38]
+(1 row)
+
+SELECT '[1.5e-38,-1.5e-38]'::tensor;
+       tensor       
+--------------------
+ [1.5e-38,-1.5e-38]
+(1 row)
+
+SELECT '[4e38,1]'::tensor;
+ERROR:  "4e38" is out of range for type tensor
+LINE 1: SELECT '[4e38,1]'::tensor;
+               ^
+SELECT '[-4e38,1]'::tensor;
+ERROR:  "-4e38" is out of range for type tensor
+LINE 1: SELECT '[-4e38,1]'::tensor;
+               ^
+SELECT '[1e-46,1]'::tensor;
+ tensor 
+--------
+ [0,1]
+(1 row)
+
+SELECT '[-1e-46,1]'::tensor;
+ tensor 
+--------
+ [-0,1]
+(1 row)
+
+SELECT '[1,2,3'::tensor;
+ERROR:  malformed tensor literal "[1,2,3"
+LINE 1: SELECT '[1,2,3'::tensor;
+               ^
+DETAIL:  Unexpected end of input.
+SELECT '[1,2,3]9'::tensor;
+ERROR:  malformed tensor literal: "[1,2,3]9"
+LINE 1: SELECT '[1,2,3]9'::tensor;
+               ^
+DETAIL:  Junk after closing square bracket.
+SELECT '1,2,3'::tensor;
+ERROR:  malformed tensor literal: "1,2,3"
+LINE 1: SELECT '1,2,3'::tensor;
+               ^
+DETAIL:  Tensor value must start with "["
+SELECT ''::tensor;
+ERROR:  malformed tensor literal: ""
+LINE 1: SELECT ''::tensor;
+               ^
+DETAIL:  Tensor value must start with "["
+SELECT '['::tensor;
+ERROR:  malformed tensor literal "["
+LINE 1: SELECT '['::tensor;
+               ^
+DETAIL:  Unexpected end of input.
+SELECT '[ '::tensor;
+ERROR:  malformed tensor literal "[ "
+LINE 1: SELECT '[ '::tensor;
+               ^
+DETAIL:  Unexpected end of input.
+SELECT '[,'::tensor;
+ERROR:  malformed tensor literal: "[,"
+LINE 1: SELECT '[,'::tensor;
+               ^
+DETAIL:  Unexpected "," character.
+SELECT '[]'::tensor;
+ERROR:  empty tensors are not supported
+LINE 1: SELECT '[]'::tensor;
+               ^
+SELECT '[[],[]]'::tensor;
+ERROR:  empty tensors are not supported
+LINE 1: SELECT '[[],[]]'::tensor;
+               ^
+SELECT '[ ]'::tensor;
+ERROR:  empty tensors are not supported
+LINE 1: SELECT '[ ]'::tensor;
+               ^
+SELECT '[,]'::tensor;
+ERROR:  malformed tensor literal: "[,]"
+LINE 1: SELECT '[,]'::tensor;
+               ^
+DETAIL:  Unexpected "," character.
+SELECT '[1,]'::tensor;
+ERROR:  malformed tensor literal: "[1,]"
+LINE 1: SELECT '[1,]'::tensor;
+               ^
+DETAIL:  Unexpected "]" character.
+SELECT '[1a]'::tensor;
+ERROR:  invalid input syntax for type tensor: "[1a]"
+LINE 1: SELECT '[1a]'::tensor;
+               ^
+SELECT '[1,,3]'::tensor;
+ERROR:  malformed tensor literal: "[1,,3]"
+LINE 1: SELECT '[1,,3]'::tensor;
+               ^
+DETAIL:  Unexpected "," character.
+SELECT '[1, ,3]'::tensor;
+ERROR:  malformed tensor literal: "[1, ,3]"
+LINE 1: SELECT '[1, ,3]'::tensor;
+               ^
+DETAIL:  Unexpected "," character.
+SELECT '[[], ]]'::tensor;
+ERROR:  malformed tensor literal: "[[], ]]"
+LINE 1: SELECT '[[], ]]'::tensor;
+               ^
+DETAIL:  Unexpected "]" character.
+SELECT '[[1, 2], [3]]'::tensor;
+ERROR:  malformed tensor literal: "[[1, 2], [3]]"
+LINE 1: SELECT '[[1, 2], [3]]'::tensor;
+               ^
+DETAIL:  Tensors must have subtensors with matching shape.
+SELECT '[[[1, 2], [3, 4]], [[1, 2], [3, 4, 5]]]'::tensor;
+ERROR:  malformed tensor literal: "[[[1, 2], [3, 4]], [[1, 2], [3, 4, 5]]]"
+LINE 1: SELECT '[[[1, 2], [3, 4]], [[1, 2], [3, 4, 5]]]'::tensor;
+               ^
+DETAIL:  Tensors must have subtensors with matching shape.
+SELECT '[[[1, 2], [3, 4]], [[5, 6], [7, 8],]]'::tensor;
+ERROR:  malformed tensor literal: "[[[1, 2], [3, 4]], [[5, 6], [7, 8],]]"
+LINE 1: SELECT '[[[1, 2], [3, 4]], [[5, 6], [7, 8],]]'::tensor;
+               ^
+DETAIL:  Unexpected "]" character.
+SELECT '[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]'::tensor;
+ERROR:  tensor dimensions exceed the maximum allowed (64)
+LINE 1: SELECT '[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[...
+               ^

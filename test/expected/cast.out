@@ -1,0 +1,58 @@
+SELECT ARRAY[[[1,2,3]]]::tensor;
+    array    
+-------------
+ [[[1,2,3]]]
+(1 row)
+
+SELECT ARRAY[[1.0, 2.0], [3.0, 4.0]]::tensor;
+     array     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+
+SELECT ARRAY[1.0,2.0,3.0]::float8[]::tensor;
+  array  
+---------
+ [1,2,3]
+(1 row)
+
+SELECT ARRAY[[1.0, 2.0],[3.0,4.0]]::float4[]::tensor;
+     array     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+
+SELECT ARRAY[[1.0, 2.0],[3.0,4.0]]::float8[]::tensor;
+     array     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+
+SELECT ARRAY[[1.0, 2.0],[3.0,4.0]]::numeric[]::tensor;
+     array     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+
+SELECT '[[1,2],[3,4]]'::tensor::double precision[];
+          float8          
+--------------------------
+ [0:1][0:1]={{1,2},{3,4}}
+(1 row)
+
+SELECT '{NULL}'::double precision[]::tensor;
+ERROR:  array must not contain nulls
+SELECT '{NaN}'::double precision[]::tensor;
+ERROR:  NaN not allowed in tensor
+SELECT '{Infinity}'::double precision[]::tensor;
+ERROR:  infinite value not allowed in tensor
+SELECT '{-Infinity}'::double precision[]::tensor;
+ERROR:  infinite value not allowed in tensor
+SELECT '{{},{}}'::double precision[]::tensor;
+ERROR:  empty tensors are not supported
+SELECT '{{1, 2},{3,4}}'::double precision[]::tensor;
+    tensor     
+---------------
+ [[1,2],[3,4]]
+(1 row)
+

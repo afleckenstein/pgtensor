@@ -1,0 +1,20 @@
+array computing for postgres
+
+pgtensor adds a tensor datatype to PostgreSQL.
+
+Why?
+
+To enable computing on multidimensional numerical data without having to round trip from a database to (e.g.) a Python script and then back to a database.
+
+
+Roadmap:
+- To/From Array
+- Reshape (Transpose)
+- Slicing
+- Elementwise Operations
+- Linear algebra primitives
+- Slicing
+- Broadcasting
+- OpenBLAS integration
+- Tiling (c.f. PostGIS ST_SUBDIVIDE)
+- Expanded object form for efficient in-memory computation
