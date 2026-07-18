@@ -3,9 +3,9 @@ EXTVERSION = 0.0.1
 
 MODULE_big = tensor
 DATA = sql/tensor--0.0.1.sql
-DOCS = README.tensor
+DOCS = README.md
 OBJS = src/tensor.o
-HEADERS = src/tensor.h
+HEADERS = src/tensor.h src/subscript.h
 
 TESTS = $(wildcard test/sql/*.sql)
 REGRESS = $(patsubst test/sql/%.sql,%,$(TESTS))
